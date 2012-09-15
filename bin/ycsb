@@ -36,6 +36,7 @@ DATABASES = {
     "infinispan"   : "com.yahoo.ycsb.db.InfinispanClient",
     "jdbc"         : "com.yahoo.ycsb.db.JdbcDBClient",
     "mapkeeper"    : "com.yahoo.ycsb.db.MapKeeperClient",
+    "memcached"    : "com.yahoo.ycsb.db.MemcacheClient",
     "mongodb"      : "com.yahoo.ycsb.db.MongoDbClient",
     "nosqldb"      : "com.yahoo.ycsb.db.NoSqlDbClient",
     "orientdb"     : "com.yahoo.ycsb.db.OrientDBClient",
