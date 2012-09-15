@@ -1,1 +1,7 @@
 /elasticsearch/target/
+.classpath
+.project
+.settings
+cassandra/target
+core/target
+memcached/target
