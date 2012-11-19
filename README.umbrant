@@ -1,0 +1,4 @@
+Build only memcached and YCSB via:
+
+    $ mvn clean install -pl memcached -am
+
