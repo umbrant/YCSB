@@ -1,6 +1,6 @@
 Build only memcached and YCSB via:
 
-    $ mvn clean install -pl memcached -am
+    $ mvn clean install -pl memcached -am -Dcheckstyle.skip -DskipTests
 
 Run a multi-get test:
 	$ bin/ycsb run memcached -P workloads/workload-mget -s -p memcached.host=127.0.0.1:11211 -threads 4
