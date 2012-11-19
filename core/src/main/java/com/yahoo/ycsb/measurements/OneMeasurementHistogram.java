@@ -140,9 +140,18 @@ public class OneMeasurementHistogram extends OneMeasurement
     {
       int[] val=returncodes.get(I);
       exporter.write(getName(), "Return="+I, val[0]);
-    }     
-
-    for (int i=0; i<_buckets; i++)
+    }
+    
+    // Only export up to the last non-zero entry in the histogram
+    int last = _buckets-1;
+    for (int i=_buckets-1; i>=0; i--) {
+    	last = i;
+    	if (histogram[i] > 0) {
+    		break;
+    	}
+    }
+    
+    for (int i=0; i<=last; i++)
     {
       exporter.write(getName(), Integer.toString(i), histogram[i]);
     }
