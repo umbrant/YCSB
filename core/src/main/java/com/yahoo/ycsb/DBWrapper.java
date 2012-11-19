@@ -17,6 +17,7 @@
 
 package com.yahoo.ycsb;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.Set;
@@ -165,4 +166,15 @@ public class DBWrapper extends DB
 		_measurements.reportReturnCode("DELETE",res);
 		return res;
 	}
+
+  @Override
+  public int multiget(String table, Collection<String> keys,
+      Set<String> fields, Vector<HashMap<String, ByteIterator>> result) {
+    long st=System.nanoTime();
+    int res=_db.multiget(table,keys,fields,result);
+    long en=System.nanoTime();
+    _measurements.measure("MULTIGET",(int)((en-st)/1000));
+    _measurements.reportReturnCode("MULTIGET",res);
+    return res;
+  }
 }

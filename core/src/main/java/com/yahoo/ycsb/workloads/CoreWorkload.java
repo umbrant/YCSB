@@ -35,6 +35,7 @@ import com.yahoo.ycsb.measurements.Measurements;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Vector;
 
@@ -189,6 +190,17 @@ public class CoreWorkload extends Workload
 	public static final String SCAN_PROPORTION_PROPERTY_DEFAULT="0.0";
 	
 	/**
+	 * The default proportion of transactions that are multi-gets.
+	 */
+	public static final String MULTIGET_PROPORTION_PROPERTY_DEFAULT="0.0";
+
+	/**
+	 * The name of the property for the proportion of transactions that are
+	 * multi-gets.
+	 */
+	public static final String MULTIGET_PROPORTION_PROPERTY="multigetproportion";
+	
+	/**
 	 * The name of the property for the proportion of transactions that are read-modify-write.
 	 */
 	public static final String READMODIFYWRITE_PROPORTION_PROPERTY="readmodifywriteproportion";
@@ -312,6 +324,9 @@ public class CoreWorkload extends Workload
 		double updateproportion=Double.parseDouble(p.getProperty(UPDATE_PROPORTION_PROPERTY,UPDATE_PROPORTION_PROPERTY_DEFAULT));
 		double insertproportion=Double.parseDouble(p.getProperty(INSERT_PROPORTION_PROPERTY,INSERT_PROPORTION_PROPERTY_DEFAULT));
 		double scanproportion=Double.parseDouble(p.getProperty(SCAN_PROPORTION_PROPERTY,SCAN_PROPORTION_PROPERTY_DEFAULT));
+
+		double multigetproportion=Double.parseDouble(p.getProperty(MULTIGET_PROPORTION_PROPERTY, MULTIGET_PROPORTION_PROPERTY_DEFAULT));
+
 		double readmodifywriteproportion=Double.parseDouble(p.getProperty(READMODIFYWRITE_PROPORTION_PROPERTY,READMODIFYWRITE_PROPORTION_PROPERTY_DEFAULT));
 		recordcount=Integer.parseInt(p.getProperty(Client.RECORD_COUNT_PROPERTY));
 		String requestdistrib=p.getProperty(REQUEST_DISTRIBUTION_PROPERTY,REQUEST_DISTRIBUTION_PROPERTY_DEFAULT);
@@ -360,6 +375,10 @@ public class CoreWorkload extends Workload
 		if (scanproportion>0)
 		{
 			operationchooser.addValue(scanproportion,"SCAN");
+		}
+		
+		if (multigetproportion > 0) {
+		  operationchooser.addValue(multigetproportion, "MULTIGET");
 		}
 		
 		if (readmodifywriteproportion>0)
@@ -490,6 +509,10 @@ public class CoreWorkload extends Workload
 		{
 			doTransactionScan(db);
 		}
+		else if (op.compareTo("MULTIGET")==0)
+		{
+			doTransactionMultiget(db);
+		}
 		else
 		{
 			doTransactionReadModifyWrite(db);
@@ -603,6 +626,30 @@ public class CoreWorkload extends Workload
 		}
 
 		db.scan(table,startkeyname,len,fields,new Vector<HashMap<String,ByteIterator>>());
+	}
+
+	public void doTransactionMultiget(DB db)
+	{
+		//choose a random scan length
+		int len=scanlength.nextInt();
+		// Generate random keys to mget
+		ArrayList<String> keys = new ArrayList<String>(len);
+		for (int i=0; i<len; i++) {
+      keys.add(buildKeyName(nextKeynum()));
+		}
+
+		HashSet<String> fields=null;
+
+		if (!readallfields)
+		{
+			//read a random field  
+			String fieldname="field"+fieldchooser.nextString();
+
+			fields=new HashSet<String>();
+			fields.add(fieldname);
+		}
+
+		db.multiget(table,keys,fields,new Vector<HashMap<String,ByteIterator>>());
 	}
 
 	public void doTransactionUpdate(DB db)

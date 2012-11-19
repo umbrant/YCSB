@@ -17,6 +17,7 @@
 
 package com.yahoo.ycsb;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.Set;
@@ -103,6 +104,18 @@ public abstract class DB
 	 * @return Zero on success, a non-zero error code on error.  See this class's description for a discussion of error codes.
 	 */
 	public abstract int scan(String table, String startkey, int recordcount, Set<String> fields, Vector<HashMap<String,ByteIterator>> result);
+	
+	/**
+	 * Perform a multi-get for a set of records in the database. Each field/value pair from the result will be stored in a HashMap.
+	 *
+	 * @param table The name of the table
+	 * @param keys The record key of the first record to read.
+	 * @param recordcount The number of records to read
+	 * @param fields The list of fields to read, or null for all of them
+	 * @param result A Vector of HashMaps, where each HashMap is a set field/value pairs for one record
+	 * @return Zero on success, a non-zero error code on error.  See this class's description for a discussion of error codes.
+	 */
+	public abstract int multiget(String table, Collection<String> keys, Set<String> fields, Vector<HashMap<String,ByteIterator>> result);
 	
 	/**
 	 * Update a record in the database. Any field/value pairs in the specified values HashMap will be written into the record with the specified

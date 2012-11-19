@@ -17,6 +17,7 @@
 
 package com.yahoo.ycsb;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.Set;
@@ -233,6 +234,33 @@ public class BasicDB extends DB
 
 		return 0;
 	}
+
+
+  @Override
+  public int multiget(String table, Collection<String> keys,
+      Set<String> fields, Vector<HashMap<String, ByteIterator>> result) {
+    delay();
+
+    if (verbose)
+    {
+      System.out.print("MULTIGET "+table+" "+keys.size()+" [ ");
+      if (fields!=null)
+      {
+        for (String f : fields)
+        {
+          System.out.print(f+" ");
+        }
+      }
+      else
+      {
+        System.out.print("<all fields>");
+      }
+
+      System.out.println("]");
+    }
+
+    return 0;
+  }
 
 	/**
 	 * Short test of BasicDB

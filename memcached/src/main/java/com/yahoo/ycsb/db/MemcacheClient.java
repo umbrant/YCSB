@@ -8,6 +8,7 @@
 package com.yahoo.ycsb.db;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.Set;
@@ -63,6 +64,13 @@ public class MemcacheClient extends DB {
   public int scan(String table, String startkey, int recordcount,
       Set<String> fields, Vector<HashMap<String, ByteIterator>> result) {
     read(table, startkey, fields, null);
+    return 0;
+  }
+
+  @Override
+  public int multiget(String table, Collection<String> keys,
+      Set<String> fields, Vector<HashMap<String, ByteIterator>> result) {
+    client.getBulk(keys);
     return 0;
   }
 
