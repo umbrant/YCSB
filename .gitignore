@@ -5,3 +5,15 @@
 cassandra/target
 core/target
 memcached/target
+distribution/target/
+dynamodb/target/
+hbase/target/
+hypertable/target/
+infinispan/target/
+jdbc/target/
+mapkeeper/target/
+mongodb/target/
+orientdb/target/
+redis/target/
+voldemort/target/
+
